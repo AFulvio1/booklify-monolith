@@ -1,8 +1,6 @@
 package com.afulvio.booklify.service;
 
-import java.lang.Long;
-
-import com.afulvio.booklify.entity.Category;
+import com.afulvio.booklify.model.Category;
 import com.afulvio.booklify.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

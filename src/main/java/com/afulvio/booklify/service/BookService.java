@@ -1,6 +1,6 @@
 package com.afulvio.booklify.service;
 
-import com.afulvio.booklify.entity.Book;
+import com.afulvio.booklify.model.Book;
 import com.afulvio.booklify.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

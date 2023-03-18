@@ -1,4 +1,4 @@
-package com.afulvio.booklify.entity;
+package com.afulvio.booklify.model;
 
 import jakarta.persistence.*;
 

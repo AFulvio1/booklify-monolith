@@ -1,8 +1,8 @@
 package com.afulvio.booklify.controller;
 
 import com.afulvio.booklify.dto.BookDTO;
-import com.afulvio.booklify.entity.Book;
-import com.afulvio.booklify.entity.Category;
+import com.afulvio.booklify.model.Book;
+import com.afulvio.booklify.model.Category;
 import com.afulvio.booklify.service.BookService;
 import com.afulvio.booklify.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

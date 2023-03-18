@@ -1,6 +1,6 @@
 package com.afulvio.booklify.repository;
 
-import com.afulvio.booklify.entity.Book;
+import com.afulvio.booklify.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

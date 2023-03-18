@@ -2,7 +2,7 @@ package com.afulvio.booklify.dto;
 
 import java.lang.Long;
 
-import com.afulvio.booklify.entity.Category;
+import com.afulvio.booklify.model.Category;
 import lombok.Data;
 
 @Data

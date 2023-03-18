@@ -60,12 +60,9 @@
         </div>
         <div class="col-sm-7 mt-5">
             <h2 th:text="${book.title}"></h2>
-            <p th:text="${book.category.name}"></p>
-            <h2>₹ <span th:text="${book.price}"></span></h2>
-            <h5>Weight:
-                <spna th:text="${book.subtitle}"></spna> grams.
-            </h5>
             <p th:text="${book.author}"></p>
+            <p th:text="${book.category.name}"></p>
+            <h2>€ <span th:text="${book.price}"></span></h2>
             <a href="" th:href="@{/addToCart/{id}(id = ${book.id})}" class="btn btn-primary">Add to cart</a>
         </div>
     </div>
