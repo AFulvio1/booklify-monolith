@@ -1,17 +1,15 @@
-package com.afulvio.booklify.entity;
-
-import jakarta.persistence.*;
+package com.afulvio.booklify.dto;
 
 import java.lang.Long;
 
-@Entity
-public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+import com.afulvio.booklify.entity.Category;
+import lombok.Data;
+
+@Data
+public class BookDTO {
+
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
 
     private String author;

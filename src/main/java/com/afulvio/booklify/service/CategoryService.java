@@ -1,5 +1,7 @@
 package com.afulvio.booklify.service;
 
+import java.lang.Long;
+
 import com.afulvio.booklify.entity.Category;
 import com.afulvio.booklify.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,13 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public void deleteCategoryById(Long id) {
+    public void deleteCategoryById(int id) {
         categoryRepository.deleteById(id);
     }
 
-    public Optional<Category> updateCategoryById(Long id) {
+    public Optional<Category> updateCategoryById(int id) {
         return categoryRepository.findById(id);
     }
+
+    public Optional<Category> getCategoryById(int id) { return categoryRepository.findById(id); }
 }
