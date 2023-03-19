@@ -47,12 +47,12 @@
         <p>Please fill out this to register</p>
         <form th:action="@{/register}" th:object="${user}" method="post">
             <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" name="firstName" id="firstName" required placeholder="Your Firstname" class="form-control form-control-lg">
+                <label for="firstname">First Name</label>
+                <input type="text" name="firstname" id="firstname" required placeholder="Your firstname" class="form-control form-control-lg">
             </div>
             <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" name="lastName" id="lastName" required placeholder="Your Lastname" class="form-control form-control-lg">
+                <label for="lastname">Last Name</label>
+                <input type="text" name="lastname" id="lastname" required placeholder="Your lastname" class="form-control form-control-lg">
             </div>
             <div class="form-group">
                 <label for="email">Email address</label>

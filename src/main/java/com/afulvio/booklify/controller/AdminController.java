@@ -8,11 +8,9 @@ import com.afulvio.booklify.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
@@ -24,8 +22,7 @@ import java.util.Optional;
 @Controller
 public class AdminController {
 
-    File path = new File(ResourceUtils.getURL("classpath:static/bookImages").getPath()).getAbsoluteFile();
-    public String uploadDir = path.getAbsolutePath();
+    public static String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/bookImages";
 
     @Autowired
     private CategoryService categoryService;
@@ -95,8 +92,7 @@ public class AdminController {
                                @RequestParam(value = "bookImage") MultipartFile file) throws IOException {
 
         Book book = new Book();
-        Optional<Category> opt = categoryService.getCategoryById(bookDTO.getCategory().getId());
-        opt.ifPresent(book::setCategory);
+        categoryService.getCategoryById(bookDTO.getCategory().getId()).ifPresent(book::setCategory);
         book.setPrice(bookDTO.getPrice());
         book.setAuthor(bookDTO.getAuthor());
         book.setTitle(bookDTO.getTitle());

@@ -1,51 +1,76 @@
 package com.afulvio.booklify.model;
 
+import com.afulvio.booklify.data.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 
-@Entity
 @Data
+@Builder
+@AllArgsConstructor
+@Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private int id;
 
-    @NotEmpty
-    @Column(nullable = false)
-    private String firstName;
+    private String firstname;
 
-    private String lastName;
+    private String lastname;
 
-    @Column(nullable = false, unique = true)
-    @NotEmpty
-    @Email(message = "{errors.invalid_email}")
     private String email;
 
-    @NotEmpty
     private String password;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "ID")}
-    )
-    private List<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    public User() {}
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
-    public User(User user) {
-        this.id = user.getId();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.roles = user.getRoles();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
