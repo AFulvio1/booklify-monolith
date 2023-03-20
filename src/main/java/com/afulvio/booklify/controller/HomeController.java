@@ -1,22 +1,33 @@
 package com.afulvio.booklify.controller;
 
+import com.afulvio.booklify.data.CategoryCounter;
 import com.afulvio.booklify.data.GlobalData;
+import com.afulvio.booklify.model.Book;
 import com.afulvio.booklify.service.BookService;
 import com.afulvio.booklify.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import java.util.Optional;
 
 @Controller
+@SessionAttributes("category_counter")
 public class HomeController {
 
     @Autowired
     private CategoryService categoryService;
-
     @Autowired
     private BookService bookService;
+
+//    @ModelAttribute(name = "category_counter")
+//    public CategoryCounter setUpCounter() {
+//        return new CategoryCounter();
+//    }
 
     @GetMapping({"/","/home"})
     public String home(Model model) {
@@ -41,8 +52,18 @@ public class HomeController {
     }
 
     @GetMapping("/shop/viewbook/{id}")
-    public String viewBook(Model model, @PathVariable Long id){
-        model.addAttribute("book", bookService.getBookById(id).get());
+    public String viewBook(
+            Model model,
+            @PathVariable Long id){
+//            @ModelAttribute(name = "category_counter") CategoryCounter counter)
+
+        Book book;
+        Optional<Book> opt = bookService.getBookById(id);
+        book = opt.orElseGet(Book::new);
+
+//        counter.updateCounter(book.getCategory().getName());
+
+        model.addAttribute("book", book);
         model.addAttribute("cartCount", GlobalData.cart.size());
         return "viewBook";
     }
@@ -55,5 +76,10 @@ public class HomeController {
     @GetMapping("/register")
     public String getRegister() {
         return "register";
+    }
+
+    @GetMapping("/error")
+    public String error() {
+        return "error";
     }
 }

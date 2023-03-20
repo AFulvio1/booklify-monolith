@@ -1,4 +1,4 @@
-package com.afulvio.booklify.authentication;
+package com.afulvio.booklify.filter;
 
 import com.afulvio.booklify.repository.TokenRepository;
 import com.afulvio.booklify.service.JwtService;

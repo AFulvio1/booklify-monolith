@@ -1,12 +1,16 @@
 package com.afulvio.booklify.controller;
 
-import com.afulvio.booklify.authentication.AuthenticationRequest;
-import com.afulvio.booklify.authentication.AuthenticationResponse;
-import com.afulvio.booklify.authentication.RegisterRequest;
+import com.afulvio.booklify.response.AuthenticationRequest;
+import com.afulvio.booklify.request.RegisterRequest;
+import com.afulvio.booklify.data.GlobalData;
 import com.afulvio.booklify.service.AuthenticationService;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -16,16 +20,19 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
-    ) {
-        return ResponseEntity.ok(authenticationService.register(request));
+    public ResponseEntity<Void> register(RegisterRequest request) {
+        authenticationService.register(request);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
-    ) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+    public ResponseEntity<Void> authenticate(AuthenticationRequest request ) {
+        ResponseEntity<Void> response;
+        Cookie coockie = new Cookie("email", request.getEmail());
+        coockie.setMaxAge(60*60*24);
+
+        GlobalData.cart.clear();
+        authenticationService.authenticate(request);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/shop")).build();
     }
 }

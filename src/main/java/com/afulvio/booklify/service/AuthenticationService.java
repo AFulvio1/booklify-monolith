@@ -1,8 +1,8 @@
 package com.afulvio.booklify.service;
 
-import com.afulvio.booklify.authentication.AuthenticationRequest;
-import com.afulvio.booklify.authentication.AuthenticationResponse;
-import com.afulvio.booklify.authentication.RegisterRequest;
+import com.afulvio.booklify.response.AuthenticationRequest;
+import com.afulvio.booklify.response.AuthenticationResponse;
+import com.afulvio.booklify.request.RegisterRequest;
 import com.afulvio.booklify.data.Role;
 import com.afulvio.booklify.data.TokenType;
 import com.afulvio.booklify.model.Token;
@@ -14,6 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -50,9 +52,15 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        Optional<User> opt = userRepository.findByEmail(request.getEmail());
+        User user;
+        if (opt.isPresent()) {
+            user = opt.get();
+        }
+        else {
+            user = new User();
+        }
+        String jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
 

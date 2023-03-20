@@ -1,4 +1,4 @@
-package com.afulvio.booklify.authentication;
+package com.afulvio.booklify.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

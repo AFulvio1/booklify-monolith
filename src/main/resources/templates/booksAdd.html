@@ -27,10 +27,13 @@
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/admin}" href="#">admin-home</a>
+                    <a class="nav-link" th:href="@{/admin}" href="#">Admin-Home</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/logout}" href="#">logout</a>
+                    <a class="nav-link" th:href="@{/login}" href="#">Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/logout}" href="#">Logout</a>
                 </li>
             </ul>
         </div>
@@ -44,12 +47,12 @@
             <div class="col-sm-5">
                 <input type="hidden" name="id" th:field="*{id}">
                 <div class="form-group">
-                    <label for="price">Price</label>
+                    <label for="price">Prezzo</label>
                     <input type="number" class="form-control" required th:field="*{price}" name="price" id="price"
                            placeholder="Price">
                 </div>
                 <div class="form-group">
-                    <label for="category">Select Category</label>
+                    <label for="category">Scegli una categoria</label>
                     <select class="form-control" th:field="*{category}" id="category" name="category">
                         <option th:each="category :${categories}"
                                 th:value="${category.id}"
@@ -58,17 +61,17 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="author">Author</label>
+                    <label for="author">Autore</label>
                     <input type="text" class="form-control" required th:field="*{author}" name="author" id="author"
                            placeholder="Enter author">
                 </div>
                 <div class="form-group">
-                    <label for="title">Title</label>
+                    <label for="title">Titolo</label>
                     <input type="text" class="form-control" required th:field="*{title}" name="title" id="title"
                            placeholder="Enter title">
                 </div>
                 <div class="form-group">
-                    <label for="subtitle">Subtitle</label>
+                    <label for="subtitle">Sottotitolo</label>
                     <input type="text" class="form-control" required th:field="*{subtitle}" name="subtitle" id="subtitle"
                            placeholder="Enter subtitle">
                 </div>
@@ -78,17 +81,17 @@
                            placeholder="Volume">
                 </div>
                 <div class="form-group">
-                    <label for="yearOfPublication">Year of Publication</label>
+                    <label for="yearOfPublication">Anno di publicazione</label>
                     <input type="text" class="form-control" required th:field="*{yearOfPublication}" name="yearOfPublication" id="yearOfPublication"
                            placeholder="Enter yearOfPublication">
                 </div>
                 <div class="form-group">
-                    <label for="publishingHouse">Publishing House</label>
+                    <label for="publishingHouse">Casa Editrice</label>
                     <input type="text" class="form-control" required th:field="*{publishingHouse}" name="publishingHouse" id="publishingHouse"
                            placeholder="Enter publishingHouse">
                 </div>
                 <div class="form-group">
-                    <label for="placeOfPublication">Place Of Publication</label>
+                    <label for="placeOfPublication">Luogo di publicazione</label>
                     <input type="text" class="form-control" required th:field="*{placeOfPublication}" name="placeOfPublication" id="placeOfPublication"
                            placeholder="Enter Place Of Publication">
                 </div>
@@ -103,16 +106,15 @@
                 </div>
             </div>
             <div class="col-sm-5">
-                <p>Book Image</p>
+                <p>Immagine del libro</p>
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" name="bookImage" accept="image/jpeg, image/png"  id="bookImage"/>
-                    <label class="custom-file-label" for="bookImage">Choose file</label>
+                    <label class="custom-file-label" for="bookImage">Schegli un immagine</label>
                 </div>
                 <div class="form-group">
                     <img src="#" id="imgPreview" height="100px" width="100px" th:src="@{${'/bookImages/' + bookDTO.imageName}}" style="margin-top: 20px" alt=" ">
                 </div>
-<!--                <input type="hidden" name="imageName" th:value="${bookDTO.imageName}">-->
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Inserisci</button>
             </div>
         </div>
     </form>

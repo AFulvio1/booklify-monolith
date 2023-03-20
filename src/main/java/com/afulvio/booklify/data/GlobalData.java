@@ -10,6 +10,6 @@ public class GlobalData {
     public static List<Book> cart;
 
     static {
-        cart = new ArrayList<>();
+        cart = new ArrayList<Book>();
     }
 }
