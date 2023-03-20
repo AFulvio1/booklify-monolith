@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +34,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**", "/", "/home/**", "/shop/**", "/login/**", "/logout/**", "/register/**",
+                .requestMatchers("/api/auth/**", "/", "/home/**", "/shop/**", "/register/**",
                         "/cart/**", "/addToCart/**", "/cart/removeItem/**", "/checkout/**").permitAll()
                 .requestMatchers("/admin/**", "/admin/books/**", "/admin/categories/**", "/admin/books/update/**", "/admin/books/delete/**",
                         "/admin/categories/update/**", "/admin/categories/delete/**").hasRole(Role.ADMIN.name())
@@ -43,12 +44,22 @@ public class SecurityConfiguration {
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                    .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                    .failureUrl("/login?error = true")
+                .and()
                     .authenticationProvider(authenticationProvider)
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                    .logout()
-                        .logoutUrl("/api/auth/logout")
-                        .addLogoutHandler(logoutHandler)
-                        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+//                    .logout()
+//                        .logoutUrl("/logout")
+//                        .addLogoutHandler(logoutHandler)
+//                        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
 
         ;
         return http.build();

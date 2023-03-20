@@ -27,10 +27,6 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<Void> authenticate(AuthenticationRequest request ) {
-        ResponseEntity<Void> response;
-        Cookie coockie = new Cookie("email", request.getEmail());
-        coockie.setMaxAge(60*60*24);
-
         GlobalData.cart.clear();
         authenticationService.authenticate(request);
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/shop")).build();
