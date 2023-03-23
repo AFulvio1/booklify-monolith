@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -30,7 +29,7 @@ public class AdminController {
     @Autowired
     private BookService bookService;
 
-    public AdminController() throws FileNotFoundException {
+    public AdminController() {
     }
 
     @GetMapping("/admin")
