@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                                         "/addToCart", "/addToCart/**",
                                         "/resources/**", "/static/**", "/images/**", "/bookImages/**", "/css/**", "/js/**")
                 .permitAll()
-                .requestMatchers("/checkout/**").hasRole(Role.USER.name())
+                .requestMatchers("/checkout/**").authenticated()
                 .requestMatchers("/admin", "/admin/**").hasAuthority(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()

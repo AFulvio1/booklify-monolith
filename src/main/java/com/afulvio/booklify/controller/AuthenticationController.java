@@ -40,7 +40,7 @@ public class AuthenticationController {
     public String postRegister(@ModelAttribute("user") User user, HttpServletRequest request) throws ServletException {
 
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRole(Role.USER);
+        user.setRole(Role.ADMIN);
         userRepository.save(user);
 
         request.login(user.getEmail(), user.getPassword());

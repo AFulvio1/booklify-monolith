@@ -26,8 +26,8 @@
         </button>
 
         <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
-        <a class="nav-link" sec:authorize="hasRole('USER')" th:href="@{/logout}" href="#">Logout</a>
-        <span sec:authorize="hasRole('USER')">Benvenuto, <span sec:authentication="name"></span></span>
+        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
+        <span sec:authorize="isAuthenticated()">Benvenuto, <span sec:authentication="name"></span></span>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto"></ul>
@@ -139,7 +139,7 @@
                                 </li>
                             </ul>
 
-                            <a th:href="@{/checkout}" h class="btn btn-primary btn-block waves-effect waves-light">Vai al checkout</a>
+                            <a th:href="@{/checkout}" class="btn btn-primary btn-block waves-effect waves-light">Vai al checkout</a>
 
                         </div>
                     </div>
