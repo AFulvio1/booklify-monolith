@@ -1,6 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -63,11 +62,12 @@
                                 <label>Nazione - <strong>ITALIA</strong></label>
                             </div>
                         </div>
+                        <input type="hidden" name="id" th:field="*{id}">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="md-form md-outline mb-0 mb-lg-4">
                                     <label for="firstname">Nome</label>
-                                    <input type="text" id="firstname" required class="form-control mb-0 mb-lg-2">
+                                    <input type="text" th:field="*{firstname}" id="firstname" required class="form-control mb-0 mb-lg-2">
                                 </div>
                             </div>
 
@@ -75,46 +75,46 @@
 
                                 <div class="md-form md-outline">
                                     <label for="lastname">Cognome</label>
-                                    <input type="text" id="lastname" required class="form-control">
+                                    <input type="text" th:field="*{lastname}" id="lastname" required class="form-control">
                                 </div>
                             </div>
                         </div>
 
                         <div class="md-form md-outline mt-2">
-                            <label for="form14">Indirizzo (Riga 1)</label>
-                            <input type="text" required id="form14" placeholder="Nome della via/piazza e n° civico" class="form-control">
+                            <label for="firstAddress">Indirizzo (Riga 1)</label>
+                            <input type="text" th:field="*{firstAddress}" required id="firstAddress" placeholder="Nome della via/piazza e n° civico" class="form-control">
                         </div>
 
                         <div class="md-form md-outline mt-2">
-                            <label for="form15">Indirizzo (Riga 2)</label>
-                            <input type="text" id="form15" placeholder="Unità, Interno (opzionale)"
+                            <label for="secondAddress">Indirizzo (Riga 2)</label>
+                            <input type="text" th:field="*{secondAddress}" id="secondAddress" placeholder="Unità, Interno (opzionale)"
                                    class="form-control">
                         </div>
 
                         <div class="md-form md-outline mt-3">
-                            <label for="form16">Codice Postale</label>
-                            <input type="text" maxlength="6" minlength="6" required id="form16" class="form-control">
+                            <label for="postCode">CAP</label>
+                            <input type="text" th:field="*{postCode}" maxlength="6" minlength="6" required id="postCode" class="form-control">
                         </div>
 
                         <div class="md-form md-outline mt-2">
-                            <label for="form17">Città</label>
-                            <input type="text" required id="form17" class="form-control">
+                            <label for="city">Città</label>
+                            <input type="text" th:field="*{city}" required id="city" class="form-control">
 
                         </div>
 
                         <div class="md-form md-outline mt-2">
-                            <label for="form18">Cellulare</label>
-                            <input type="number" minlength="10" maxlength="10" required id="form18" class="form-control">
+                            <label for="telephone">Cellulare</label>
+                            <input type="number" th:field="*{telephone}" minlength="10" maxlength="10" required id="telephone" class="form-control">
                         </div>
 
                         <div class="md-form md-outline mt-2">
-                            <label for="form19">Indirizzo email</label>
-                            <input type="email" required id="form19" class="form-control">
+                            <label for="email">Indirizzo email</label>
+                            <input type="email" th:field="*{email}" required id="email" class="form-control">
                         </div>
 
                         <div class="md-form md-outline mt-2">
-                            <label for="form76">Informazioni aggiuntive</label>
-                            <textarea id="form76" class="md-textarea form-control" rows="4"></textarea>
+                            <label for="note">Informazioni aggiuntive</label>
+                            <textarea id="note" th:field="*{note}" class="md-textarea form-control" rows="4"></textarea>
                         </div>
 
                     </div>
@@ -147,7 +147,9 @@
                             </li>
                         </ul>
 
-                        <form action="" method="post" th:action="@{/payNow}" >
+                        <input type="hidden" name="id" th:field="*{total}">
+
+                        <form action="" method="post" th:object="${orderDTO}" th:action="@{/payNow}" >
                             <button type="submit"  class="btn btn-primary btn-block waves-effect waves-light">Paga ora</button>
                         </form>
 

@@ -44,7 +44,7 @@ public class HomeController {
     }
 
     @GetMapping("/shop/category/{id}")
-    public String shopByCategory(Model model, @PathVariable int id){
+    public String shopByCategory(Model model, @PathVariable Integer id){
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("books", bookService.getAllBooksByCategory(id));
         model.addAttribute("cartCount", GlobalData.cart.size());
@@ -73,6 +73,7 @@ public class HomeController {
         GlobalData.cart.clear();
         return "login";
     }
+
     @GetMapping("/register")
     public String getRegister() {
         return "register";

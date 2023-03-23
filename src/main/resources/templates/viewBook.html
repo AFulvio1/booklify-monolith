@@ -1,6 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -15,7 +14,7 @@
 <body>
 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
             <img th:src="@{/images/logo.png}" src="../static/images/logo.png" width="auto" height="40"
@@ -25,6 +24,9 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
+        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto"></ul>
@@ -36,22 +38,17 @@
                     <a class="nav-link" th:href="@{/shop}" href="#">Shop</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
-                </li>
-                <li class="nav-item active">
                     <a class="nav-link" th:href="@{/cart}" href="#">Cart</a>
                 </li>
                 <li class="nav-item active">
-                    <span class="nav-link" th:text="${cartCount}"></span>
+                    <span class="nav-link" style="color: blue;" th:text="${cartCount}"></span>
                 </li>
             </ul>
 
         </div>
     </div>
 </nav>
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-sm-5 d-flex justify-content-center">
@@ -59,9 +56,13 @@
                  alt="">
         </div>
         <div class="col-sm-7 mt-5">
-            <p th:text="${book.category.name}"></p>
-            <h2 th:text="${book.title}"></h2>
-            <p th:text="${book.author}"></p>
+            <h3 th:text="${book.title}"></h3>
+            <h4 th:text="${book.author}"></h4>
+            <h5 th:text="${book.category.name}"></h5>
+            <p>Sottotitolo: <span th:text="${book.subtitle}"></span> \ Volume: <span th:text="${book.volume}"></span></p>
+            <p><span th:text="${book.yearOfPublication}"></span> - <span th:text="${book.publishingHouse}"></span> - <span th:text="${book.placeOfPublication}"></span></p>
+            <p>ISBN: <span th:text="${book.isbn}"></span></p>
+            <p>Note: <span th:text="${book.note}"></span></p>
             <h2>€ <span th:text="${book.price}"></span></h2>
             <a href="" th:href="@{/addToCart/{id}(id = ${book.id})}" class="btn btn-primary">Aggiungi al carrello</a>
         </div>

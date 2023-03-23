@@ -1,7 +1,7 @@
 package com.afulvio.booklify.configuration;
 
 import com.afulvio.booklify.filter.JwtAuthenticationFilter;
-import com.afulvio.booklify.data.Role;
+import com.afulvio.booklify.service.LogoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,12 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +23,7 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final LogoutHandler logoutHandler;
+    private final LogoutService logoutService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,40 +31,36 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**", "/", "/home/**", "/shop/**", "/register/**",
-                        "/cart/**", "/addToCart/**", "/cart/removeItem/**", "/checkout/**").permitAll()
-                .requestMatchers("/admin/**", "/admin/books/**", "/admin/categories/**", "/admin/books/update/**", "/admin/books/delete/**",
-                        "/admin/categories/update/**", "/admin/categories/delete/**").hasRole(Role.ADMIN.name())
+                .requestMatchers("/", "/home",
+                                        "/register", "/login", "/logout",
+                                        "/shop", "/shop/**",
+                                        "/cart", "/cart/**",
+                                        "/addToCart", "/addToCart/**",
+                                        "/admin", "/admin/**",
+                                        "/resources/**", "/static/**", "/images/**", "/bookImages/**", "/css/**", "/js/**",
+                                        "/api/auth/**").permitAll()
+                .requestMatchers("/checkout/**").hasRole("USER")
                 .anyRequest()
-                .authenticated()
+                    .authenticated()
                 .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .formLogin()
                     .loginPage("/login")
+                    .defaultSuccessUrl("/")
+                    .failureForwardUrl("/login?error")
                     .permitAll()
-                    .failureUrl("/login?error = true")
                 .and()
                     .authenticationProvider(authenticationProvider)
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-//                    .logout()
-//                        .logoutUrl("/logout")
-//                        .addLogoutHandler(logoutHandler)
-//                        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                .logoutUrl("/logout")
+                .addLogoutHandler(logoutService)
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
 
         ;
         return http.build();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
-        return (web) -> web.ignoring().requestMatchers("/resources/**", "/static/**", "/images/**", "/bookImages/**", "/css/**", "/js/**");
     }
 
     @Bean

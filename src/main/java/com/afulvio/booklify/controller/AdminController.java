@@ -57,13 +57,13 @@ public class AdminController {
     }
 
     @GetMapping("/admin/categories/delete/{id}")
-    public String getCategoriesDeleteById(@PathVariable int id) {
+    public String getCategoriesDeleteById(@PathVariable Integer id) {
         categoryService.deleteCategoryById(id);
         return "redirect:/admin/categories";
     }
 
     @GetMapping("/admin/categories/update/{id}")
-    public String getCategoriesUpdateById(@PathVariable int id, Model model) {
+    public String getCategoriesUpdateById(@PathVariable Integer id, Model model) {
         Optional<Category> category = categoryService.updateCategoryById(id);
         if (category.isPresent()) {
             model.addAttribute("category", category.get());
@@ -128,34 +128,32 @@ public class AdminController {
     }
 
     @GetMapping("/admin/books/update/{id}")
-    public String getBooksUpdateById(@PathVariable Long id, Model model) {
+    public String getBooksUpdateById(
+            @PathVariable Long id,
+            Model model
+    ){
+
         Optional<Book> opt = bookService.getBookById(id);
-        if (opt.isPresent()) {
-            Book book = opt.get();
+        Book book = opt.orElseGet(Book::new);
 
-            BookDTO bookDTO = new BookDTO();
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setId(book.getId());
+        bookDTO.setCategory(book.getCategory());
+        bookDTO.setPrice(book.getPrice());
+        bookDTO.setAuthor(book.getAuthor());
+        bookDTO.setTitle(book.getTitle());
+        bookDTO.setSubtitle(book.getSubtitle());
+        bookDTO.setVolume(book.getVolume());
+        bookDTO.setYearOfPublication(book.getYearOfPublication());
+        bookDTO.setPublishingHouse(book.getPublishingHouse());
+        bookDTO.setPlaceOfPublication(book.getPlaceOfPublication());
+        bookDTO.setIsbn(book.getIsbn());
+        bookDTO.setNote(book.getNote());
+        bookDTO.setImageName(book.getImageName());
 
-            bookDTO.setId(book.getId());
-            bookDTO.setCategory(book.getCategory());
-            bookDTO.setPrice(book.getPrice());
-            bookDTO.setAuthor(book.getAuthor());
-            bookDTO.setTitle(book.getTitle());
-            bookDTO.setSubtitle(book.getSubtitle());
-            bookDTO.setVolume(book.getVolume());
-            bookDTO.setYearOfPublication(book.getYearOfPublication());
-            bookDTO.setPublishingHouse(book.getPublishingHouse());
-            bookDTO.setPlaceOfPublication(book.getPlaceOfPublication());
-            bookDTO.setIsbn(book.getIsbn());
-            bookDTO.setNote(book.getNote());
-            bookDTO.setImageName(book.getImageName());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("bookDTO", bookDTO);
 
-            model.addAttribute("categories", categoryService.getAllCategories());
-            model.addAttribute("bookDTO", bookDTO);
-
-            return "booksAdd";
-        }
-        else {
-            return "404";
-        }
+        return "booksAdd";
     }
 }

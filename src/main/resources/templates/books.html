@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
-    <title>Books</title>
+    <title>Libri</title>
 
 </head>
 <body>
@@ -29,10 +29,10 @@
                     <a class="nav-link" th:href="@{/admin}" href="#">Admin-Home</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/login}" href="#">Login</a>
+                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/logout}" href="#">Logout</a>
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
                 </li>
 
             </ul>
@@ -42,16 +42,16 @@
 </nav>
 <div class="container-fluid">
 
-    <a th:href="@{/admin/books/add}" style="margin: 20px 0" class="btn btn-primary">Add book</a>
+    <a th:href="@{/admin/books/add}" style="margin: 20px 0" class="btn btn-primary">Inserisci un libro</a>
     <table class="table">
         <thead class="thead-light">
         <tr>
             <th scope="col">SN</th>
-            <th scope="col">Book's Title</th>
-            <th scope="col">Category</th>
-            <th scope="col">Preview</th>
-            <th scope="col">Delete</th>
-            <th scope="col">Update</th>
+            <th scope="col">Titolo</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Immagine</th>
+            <th scope="col">Elimina</th>
+            <th scope="col">Aggiorna</th>
         </tr>
         </thead>
         <tbody>
@@ -62,8 +62,8 @@
             <td th:text="${book.category.name}">Larry</td>
             <td><img src="" height="100px" width="100px"  th:src="@{${'/bookImages/' + book.imageName}}"></td>
 
-            <td><a href="" th:href="@{/admin/books/delete/{id}(id=${book.id})}" class="btn btn-danger">Delete</a></td>
-            <td><a href="" th:href="@{/admin/books/update/{id}(id=${book.id})}" class="btn btn-warning">Update</a></td>
+            <td><a href="" th:href="@{/admin/books/delete/{id}(id=${book.id})}" class="btn btn-danger">Elimina</a></td>
+            <td><a href="" th:href="@{/admin/books/update/{id}(id=${book.id})}" class="btn btn-warning">Aggiorna</a></td>
 
         </tr>
         </tbody>

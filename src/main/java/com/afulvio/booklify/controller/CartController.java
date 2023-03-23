@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public class CartController {
     }
 
     @GetMapping("/cart/removeItem/{id}")
-    public String cartItemRemove(@PathVariable int id) {
+    public String cartItemRemove(@PathVariable Integer id) {
         GlobalData.cart.remove(id);
         return "redirect:/cart";
     }
@@ -49,5 +50,11 @@ public class CartController {
     public String checkout(Model model) {
         model.addAttribute("total", GlobalData.cart.stream().filter(b -> b.getPrice() > 0).mapToDouble(b -> b.getPrice()).sum());
         return "checkout";
+    }
+
+    @PostMapping("/payNow")
+    public String payNow() {
+        GlobalData.cart.clear();
+        return "redirect:/index";
     }
 }

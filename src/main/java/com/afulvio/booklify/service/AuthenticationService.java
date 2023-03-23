@@ -33,7 +33,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ADMIN)
+                .role(Role.USER)
                 .build();
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -53,13 +53,7 @@ public class AuthenticationService {
                 )
         );
         Optional<User> opt = userRepository.findByEmail(request.getEmail());
-        User user;
-        if (opt.isPresent()) {
-            user = opt.get();
-        }
-        else {
-            user = new User();
-        }
+        User user = opt.orElseGet(User::new);
         String jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);

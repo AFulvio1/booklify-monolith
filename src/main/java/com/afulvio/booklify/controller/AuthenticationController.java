@@ -1,34 +1,54 @@
 package com.afulvio.booklify.controller;
 
-import com.afulvio.booklify.response.AuthenticationRequest;
-import com.afulvio.booklify.request.RegisterRequest;
 import com.afulvio.booklify.data.GlobalData;
+import com.afulvio.booklify.model.User;
+import com.afulvio.booklify.repository.UserRepository;
+import com.afulvio.booklify.request.RegisterRequest;
+import com.afulvio.booklify.response.AuthenticationRequest;
+import com.afulvio.booklify.response.AuthenticationResponse;
 import com.afulvio.booklify.service.AuthenticationService;
-import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(RegisterRequest request) {
+    public String register(RegisterRequest request) {
         authenticationService.register(request);
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/")).build();
+        return "redirect:/login";
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> authenticate(AuthenticationRequest request ) {
+    public String authenticate(AuthenticationRequest request) {
+
         GlobalData.cart.clear();
+        Optional<User> opt = userRepository.findByEmail(request.getEmail());
+        User user = opt.orElseGet(User::new);
+        String page = user.getRole().name().equals("ADMIN") ? "admin" : "shop";
+        String redirect = "redirect:/";
+
         authenticationService.authenticate(request);
-        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/shop")).build();
+
+        return redirect.concat(page);
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/index";
     }
 }
