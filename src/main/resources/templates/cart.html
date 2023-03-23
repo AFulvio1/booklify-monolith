@@ -27,7 +27,7 @@
 
         <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
         <a class="nav-link" sec:authorize="hasRole('USER')" th:href="@{/logout}" href="#">Logout</a>
-        <span sec:authorize="hasRole('USER')">Welcome, <span sec:authentication="name"></span></span>
+        <span sec:authorize="hasRole('USER')">Benvenuto, <span sec:authentication="name"></span></span>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto"></ul>

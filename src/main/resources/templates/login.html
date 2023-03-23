@@ -23,6 +23,10 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
+        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
+        <span sec:authorize="isAuthenticated()">Benvenuto, <span sec:authentication="name"></span></span>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
@@ -45,7 +49,7 @@
         <div class="col-sm-6">
             <h2>Login</h2>
             <p>Inserisci i tuoi dati per completare il login</p>
-            <form th:action="@{/api/auth/login}" method="post">
+            <form th:action="@{/login}" method="post">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email" placeholder="La tua email" class="form-control form-control-lg">
@@ -61,8 +65,7 @@
 
                 <input type="submit" value="Login" href="./index.html" th:href="@{/home}" class="btn btn-primary btn-block">
                 <br>
-                <span >Non hai un account? <a class="linkControl" href="./register.html"
-                                                th:href="@{/register}">Registrati qui</a></span>
+                <span >Non hai un account? <a class="linkControl" href="./register.html" th:href="@{/register}">Registrati qui</a></span>
                 <br>
                 <a href="" th:href="@{/forgotpassword}">Password dimenticata ?</a>
             </form>
