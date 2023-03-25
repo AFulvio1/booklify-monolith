@@ -60,7 +60,7 @@
             <th scope="row" th:text="${iStat.index + 1}">1</th>
             <td th:text="${book.title}">Larry</td>
             <td th:text="${book.category.name}">Larry</td>
-            <td><img src="" height="100px" width="100px"  th:src="@{${'/bookImages/' + book.imageName}}"></td>
+            <td><img src="" height="130px" width="100px"  th:src="@{${'/bookImages/' + book.imageName}}"></td>
 
             <td><a href="" th:href="@{/admin/books/delete/{id}(id=${book.id})}" class="btn btn-danger">Elimina</a></td>
             <td><a href="" th:href="@{/admin/books/update/{id}(id=${book.id})}" class="btn btn-warning">Aggiorna</a></td>

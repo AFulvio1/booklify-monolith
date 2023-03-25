@@ -5,22 +5,24 @@ import com.afulvio.booklify.dto.SearchDTO;
 import com.afulvio.booklify.model.Book;
 import com.afulvio.booklify.service.BookService;
 import com.afulvio.booklify.service.CategoryService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Controller
-@SessionAttributes("category_counter")
 public class HomeController {
 
     @Autowired
@@ -30,8 +32,11 @@ public class HomeController {
 
 
     @GetMapping({"/","/home"})
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
+        List<Book> recommended = getRecommendedBoooks(session);
         model.addAttribute("cartCount", GlobalData.cart.size());
+        model.addAttribute("recommended", recommended);
+        model.addAttribute("sessionId", session.getId());
         return "index";
     }
 
@@ -66,13 +71,21 @@ public class HomeController {
     public String viewBook(
             Model model,
             @PathVariable Long id,
-            @ModelAttribute(value = "searchDTO") SearchDTO searchDTO
+            @ModelAttribute(value = "searchDTO") SearchDTO searchDTO,
+            HttpServletRequest request
     ){
 
         Book book;
         Optional<Book> opt = bookService.getBookById(id);
         book = opt.orElseGet(Book::new);
 
+        Integer categoryId = book.getCategory().getId();
+
+        if (categoryId != null) {
+            List<Integer> favoriteCategory = getRecommendedCategories(request.getSession());
+            favoriteCategory.add(categoryId);
+            request.getSession().setAttribute("favoriteCategory", favoriteCategory);
+        }
 
         model.addAttribute("book", book);
         model.addAttribute("cartCount", GlobalData.cart.size());
@@ -120,4 +133,26 @@ public class HomeController {
         }
         return "shop";
     }
+
+    private List<Integer> getRecommendedCategories(HttpSession session) {
+        List<Integer> favoriteCategory = (List<Integer>) session.getAttribute("favoriteCategory");
+
+        if (favoriteCategory == null) {
+            favoriteCategory = new ArrayList<>();
+        }
+        return favoriteCategory;
+    }
+
+    private List<Book> getRecommendedBoooks(HttpSession session) {
+        List<Integer> favoriteCategory = getRecommendedCategories(session);
+        List<Book> recommendedBooks = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(favoriteCategory)) {
+            for (Integer id : favoriteCategory) {
+                recommendedBooks.addAll(bookService.getAllBooksByCategory(id));
+            }
+        }
+        return recommendedBooks;
+    }
+
+
 }

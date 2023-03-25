@@ -42,25 +42,26 @@
     <div class="col-sm-6">
         <h3 style="margin-top: 10px">Registrati ora</h3>
         <p>Inserisci i tuoi dati per completare la registrazione</p>
-        <form th:action="@{/register}" th:object="${user}" method="post">
+        <form th:action="@{/register}" th:object="${userDTO}" method="post">
+            <input type="hidden" name="id" th:field="*{id}">
             <div class="form-group">
                 <label for="firstname">Nome</label>
-                <input type="text" name="firstname" id="firstname" required placeholder="Your firstname" class="form-control form-control-lg">
+                <input type="text" name="firstname" id="firstname" th:field="*{firstname}" required placeholder="Your firstname" class="form-control form-control-lg">
             </div>
             <div class="form-group">
                 <label for="lastname">Cognome</label>
-                <input type="text" name="lastname" id="lastname" required placeholder="Your lastname" class="form-control form-control-lg">
+                <input type="text" name="lastname" id="lastname" th:field="*{lastname}" required placeholder="Your lastname" class="form-control form-control-lg">
             </div>
             <div class="form-group">
                 <label for="email">Indirizzo mail</label>
-                <input type="email" class="form-control form-control-lg" required minlength="6" placeholder="Email" name="email" id="email"
+                <input type="email" class="form-control form-control-lg" th:field="*{email}" required minlength="6" placeholder="Email" name="email" id="email"
                        aria-describedby="emailHelp">
                 <small id="emailHelp" class="form-text text-muted">Non comunicare la tua password con nessuno</small>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" class="form-control form-control-lg" required placeholder="Password" name="password"
-                       id="password">
+                       id="password" th:field="*{password}">
             </div>
 
             <input type="submit" value="Registrati" class="btn btn-primary btn-block">

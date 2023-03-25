@@ -47,7 +47,6 @@
         <tr>
             <th scope="col">SN</th>
             <th scope="col">Categoria</th>
-            <th scope="col">Elimina</th>
             <th scope="col">Aggiorna</th>
         </tr>
         </thead>
@@ -57,7 +56,6 @@
             <th scope="row" th:text="${iStat.index + 1}">1</th>
             <td th:text="${category.name}">Larry</td>
 
-            <td><a href="" th:href="@{/admin/categories/delete/{id}(id=${category.id})}" class="btn btn-danger">Elimina</a></td>
             <td><a href="" th:href="@{/admin/categories/update/{id}(id=${category.id})}" class="btn btn-warning">Aggiorna</a></td>
 
         </tr>

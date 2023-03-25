@@ -1,6 +1,7 @@
 package com.afulvio.booklify.dto;
 
 import java.lang.Long;
+import java.math.BigDecimal;
 
 import com.afulvio.booklify.model.Category;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class BookDTO {
 
     private String isbn;
 
-    private double price;
+    private BigDecimal price;
 
     private String note;
 

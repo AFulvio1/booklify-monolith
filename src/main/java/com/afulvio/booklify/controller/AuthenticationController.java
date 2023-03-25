@@ -1,6 +1,7 @@
 package com.afulvio.booklify.controller;
 
 import com.afulvio.booklify.data.Role;
+import com.afulvio.booklify.dto.UserDTO;
 import com.afulvio.booklify.model.User;
 import com.afulvio.booklify.repository.UserRepository;
 import jakarta.servlet.ServletException;
@@ -34,20 +35,22 @@ public class AuthenticationController {
 
     @GetMapping("/register")
     public String getRegister(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("userDTO", new UserDTO());
         return "register";
     }
 
     @PostMapping("/register")
-    public String postRegister(@ModelAttribute("user") User user, HttpServletRequest request) throws ServletException {
+    public String postRegister(@ModelAttribute("userDTO") UserDTO userDTO, HttpServletRequest request) throws ServletException {
 
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRole(Role.ADMIN);
+        User user = new User();
+        user.setFirstname(userDTO.getFirstname());
+        user.setLastname(userDTO.getLastname());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+        user.setRole(Role.USER);
         userRepository.save(user);
 
-        request.login(user.getEmail(), user.getPassword());
-
-        return "redirect:/";
+        return "redirect:/login";
     }
 
 }

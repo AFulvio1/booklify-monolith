@@ -14,15 +14,20 @@
 </head>
 <body>
 
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light" >
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-            <img th:src="@{/images/logo.png}"  src="../static/images/logo.png" width="auto" height="40" class="d-inline-block align-top" alt=""/>
+            <img th:src="@{/images/logo.png}" src="../static/images/logo.png" width="auto" height="40"
+                 class="d-inline-block align-top" alt=""/>
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
+        <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
+        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
+        <span sec:authorize="isAuthenticated()">Benvenuto, <span sec:authentication="name"></span></span>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto"></ul>
@@ -34,16 +39,10 @@
                     <a class="nav-link" th:href="@{/shop}" href="#">Shop</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
-                </li>
-                <li class="nav-item active">
                     <a class="nav-link" th:href="@{/cart}" href="#">Cart</a>
                 </li>
                 <li class="nav-item active">
-                    <span class="nav-link" th:text="${cartCount}">0</span>
+                    <span class="nav-link" style="color: blue;" th:text="${cartCount}"></span>
                 </li>
             </ul>
 
@@ -70,7 +69,7 @@
                                 <div class="col-lg-6">
                                     <div class="md-form md-outline mb-0 mb-lg-4">
                                         <label for="firstname">Nome</label>
-                                        <input type="text" th:field="*{firstname}" id="firstname" required class="form-control mb-0 mb-lg-2">
+                                        <input type="text" th:field="*{firstname}" id="firstname" name="firstname" required class="form-control mb-0 mb-lg-2">
                                     </div>
                                 </div>
 
@@ -78,46 +77,46 @@
 
                                     <div class="md-form md-outline">
                                         <label for="lastname">Cognome</label>
-                                        <input type="text" th:field="*{lastname}" id="lastname" required class="form-control">
+                                        <input type="text" th:field="*{lastname}" id="lastname" name="lastname" required class="form-control">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="md-form md-outline mt-2">
                                 <label for="firstAddress">Indirizzo (Riga 1)</label>
-                                <input type="text" th:field="*{firstAddress}" required id="firstAddress" placeholder="Nome della via/piazza e n° civico" class="form-control">
+                                <input type="text" th:field="*{firstAddress}" required id="firstAddress" name="firstAddress" placeholder="Nome della via/piazza e n° civico" class="form-control">
                             </div>
 
                             <div class="md-form md-outline mt-2">
                                 <label for="secondAddress">Indirizzo (Riga 2)</label>
-                                <input type="text" th:field="*{secondAddress}" id="secondAddress" placeholder="Unità, Interno (opzionale)"
+                                <input type="text" th:field="*{secondAddress}" id="secondAddress" name="secondAddress" placeholder="Unità, Interno (opzionale)"
                                        class="form-control">
                             </div>
 
                             <div class="md-form md-outline mt-3">
                                 <label for="postCode">CAP</label>
-                                <input type="text" th:field="*{postCode}" maxlength="6" minlength="6" required id="postCode" class="form-control">
+                                <input type="text" th:field="*{postCode}" maxlength="6" minlength="6" required id="postCode" name="postCode" class="form-control">
                             </div>
 
                             <div class="md-form md-outline mt-2">
                                 <label for="city">Città</label>
-                                <input type="text" th:field="*{city}" required id="city" class="form-control">
+                                <input type="text" th:field="*{city}" required id="city" name="city" class="form-control">
 
                             </div>
 
                             <div class="md-form md-outline mt-2">
                                 <label for="telephone">Cellulare</label>
-                                <input type="number" th:field="*{telephone}" minlength="10" maxlength="10" required id="telephone" class="form-control">
+                                <input type="number" th:field="*{telephone}" minlength="10" maxlength="10" required id="telephone" name="telephone" class="form-control">
                             </div>
 
                             <div class="md-form md-outline mt-2">
                                 <label for="email">Indirizzo email</label>
-                                <input type="email" th:field="*{email}" required id="email" class="form-control">
+                                <input type="email" th:field="*{email}" required id="email" name="email" class="form-control">
                             </div>
 
                             <div class="md-form md-outline mt-2">
                                 <label for="note">Informazioni aggiuntive</label>
-                                <textarea id="note" th:field="*{note}" class="md-textarea form-control" rows="4"></textarea>
+                                <textarea id="note" name="note" th:field="*{note}" class="md-textarea form-control" rows="4"></textarea>
                             </div>
 
                         </div>
@@ -150,8 +149,7 @@
                                 </li>
                             </ul>
 
-                            <input type="hidden" name="id" th:field="*{total}">
-
+                            <input type="hidden" id="total" name="total" th:field="*{total}" th:value="${total}">
 
                             <button id="search-button" type="submit" class="btn btn-primary btn-block waves-effect waves-light">Paga ora</button>
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Controller
@@ -33,8 +34,12 @@ public class CartController {
 
     @GetMapping("/cart")
     public String getCart(Model model) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Book book : GlobalData.cart) {
+            total = total.add(book.getPrice());
+        }
         model.addAttribute("cartCount", GlobalData.cart.size());
-        model.addAttribute("total", GlobalData.cart.stream().filter(b -> b.getPrice() > 0).mapToDouble(Book::getPrice).sum());
+        model.addAttribute("total", total);
         model.addAttribute("cart", GlobalData.cart);
         return "cart";
     }
@@ -56,7 +61,11 @@ public class CartController {
 
     @GetMapping("/checkout")
     public String checkout(Model model) {
-        model.addAttribute("total", GlobalData.cart.stream().filter(b -> b.getPrice() > 0).mapToDouble(Book::getPrice).sum());
+        BigDecimal total = BigDecimal.ZERO;
+        for (Book book : GlobalData.cart) {
+            total = total.add(book.getPrice());
+        }
+        model.addAttribute("total", total);
         model.addAttribute("orderDTO", new OrderDTO());
         return "checkout";
     }
@@ -83,6 +92,8 @@ public class CartController {
         order.setNation(orderDTO.getNation());
         order.setPostCode(orderDTO.getPostCode());
         order.setTelephone(orderDTO.getTelephone());
+        if (orderDTO.getTotal() == null)
+            order.setTotal(BigDecimal.ZERO);
         order.setTotal(orderDTO.getTotal());
 
         orderRepository.save(order);

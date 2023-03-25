@@ -3,7 +3,7 @@ package com.afulvio.booklify.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.lang.Long;
+import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -33,7 +33,7 @@ public class Book {
 
     private String isbn;
 
-    private double price;
+    private BigDecimal price;
 
     private String note;
 

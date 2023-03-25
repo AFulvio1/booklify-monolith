@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @Builder
@@ -43,6 +45,6 @@ public class Order {
 
     private String note;
 
-    private double total;
+    private BigDecimal total;
 
 }
