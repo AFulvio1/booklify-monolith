@@ -33,8 +33,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/", "/home",
                                         "/register",
-                                        "/shop", "/shop/**",
-                                        "/cart", "/cart/**",
+                                        "/shop", "/shop/**", "/shop/title/**",
+                                        "/cart", "/cart/**", "/payNow",
                                         "/addToCart", "/addToCart/**",
                                         "/resources/**", "/static/**", "/images/**", "/bookImages/**", "/css/**", "/js/**")
                 .permitAll()

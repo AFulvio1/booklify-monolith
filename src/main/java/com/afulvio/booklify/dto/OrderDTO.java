@@ -1,6 +1,5 @@
 package com.afulvio.booklify.dto;
 
-import com.afulvio.booklify.model.User;
 import lombok.Data;
 
 @Data
@@ -8,7 +7,7 @@ public class OrderDTO {
 
     private Long id;
 
-    private User user;
+    private String username;
 
     private String firstname;
 

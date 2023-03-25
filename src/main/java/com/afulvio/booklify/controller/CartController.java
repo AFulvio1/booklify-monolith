@@ -4,10 +4,12 @@ import com.afulvio.booklify.data.GlobalData;
 import com.afulvio.booklify.dto.OrderDTO;
 import com.afulvio.booklify.model.Book;
 import com.afulvio.booklify.model.Order;
+import com.afulvio.booklify.model.User;
 import com.afulvio.booklify.repository.OrderRepository;
 import com.afulvio.booklify.repository.UserRepository;
 import com.afulvio.booklify.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,6 +57,7 @@ public class CartController {
     @GetMapping("/checkout")
     public String checkout(Model model) {
         model.addAttribute("total", GlobalData.cart.stream().filter(b -> b.getPrice() > 0).mapToDouble(Book::getPrice).sum());
+        model.addAttribute("orderDTO", new OrderDTO());
         return "checkout";
     }
 
@@ -63,7 +66,13 @@ public class CartController {
     public String postPayNow(@ModelAttribute(value = "orderDTO") OrderDTO orderDTO) {
 
         Order order = new Order();
-        userRepository.findById(orderDTO.getUser().getId()).ifPresent(order::setUser);
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = "";
+        if (principal instanceof User) {
+            username = ((User) principal).getUsername();
+        }
+        userRepository.findByEmail(username).ifPresent(order::setUser);
         order.setNote(orderDTO.getNote());
         order.setCity(orderDTO.getCity());
         order.setEmail(orderDTO.getEmail());
@@ -79,6 +88,6 @@ public class CartController {
         orderRepository.save(order);
 
         GlobalData.cart.clear();
-        return "redirect:/index";
+        return "index";
     }
 }

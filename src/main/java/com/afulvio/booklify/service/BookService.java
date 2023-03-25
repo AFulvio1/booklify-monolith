@@ -32,4 +32,12 @@ public class BookService {
     public List<Book> getAllBooksByCategory(int id) {
         return bookRepository.findAllByCategory_id(id);
     }
+
+    public List<Book> getAllBooksByTitle(String keyword) {
+        return bookRepository.findByTitleContaining(keyword);
+    }
+
+    public List<Book> getAllBooksByAuthor(String keyword) {
+        return bookRepository.findByAuthorContaining(keyword);
+    }
 }
