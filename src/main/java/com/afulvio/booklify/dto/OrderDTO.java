@@ -33,4 +33,6 @@ public class OrderDTO {
 
     private BigDecimal total;
 
+    private String listOfBookIds;
+
 }

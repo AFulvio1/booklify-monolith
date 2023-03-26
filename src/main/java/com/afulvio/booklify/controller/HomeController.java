@@ -3,12 +3,16 @@ package com.afulvio.booklify.controller;
 import com.afulvio.booklify.data.GlobalData;
 import com.afulvio.booklify.dto.SearchDTO;
 import com.afulvio.booklify.model.Book;
+import com.afulvio.booklify.model.Order;
+import com.afulvio.booklify.model.User;
 import com.afulvio.booklify.service.BookService;
 import com.afulvio.booklify.service.CategoryService;
+import com.afulvio.booklify.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -17,9 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -29,13 +31,25 @@ public class HomeController {
     private CategoryService categoryService;
     @Autowired
     private BookService bookService;
+    @Autowired
+    private OrderService orderService;
 
 
     @GetMapping({"/","/home"})
     public String home(Model model, HttpSession session) {
-        List<Book> recommended = getRecommendedBoooks(session);
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = "";
+        if (principal instanceof User) {
+            username = ((User) principal).getUsername();
+        }
+
+        Set<Book> recommendedBooks = getRecommendedBoooks(session);
+        Set<Book> lastPurchaseBooks = getLastPurchaseBooks(username);
+
         model.addAttribute("cartCount", GlobalData.cart.size());
-        model.addAttribute("recommended", recommended);
+        model.addAttribute("recommendedBooks", recommendedBooks);
+        model.addAttribute("lastPurchaseBooks", lastPurchaseBooks);
         model.addAttribute("sessionId", session.getId());
         return "index";
     }
@@ -143,9 +157,9 @@ public class HomeController {
         return favoriteCategory;
     }
 
-    private List<Book> getRecommendedBoooks(HttpSession session) {
+    private Set<Book> getRecommendedBoooks(HttpSession session) {
         List<Integer> favoriteCategory = getRecommendedCategories(session);
-        List<Book> recommendedBooks = new ArrayList<>();
+        Set<Book> recommendedBooks = new HashSet<>();
         if (!CollectionUtils.isEmpty(favoriteCategory)) {
             for (Integer id : favoriteCategory) {
                 recommendedBooks.addAll(bookService.getAllBooksByCategory(id));
@@ -154,5 +168,20 @@ public class HomeController {
         return recommendedBooks;
     }
 
-
+    private Set<Book> getLastPurchaseBooks(String username) {
+        Set<Long> ids = new HashSet<>();
+        List<Order> orders = orderService.getAllOrderByEmail(username);
+        for (Order order : orders) {
+            String listOfBookIds = order.getListOfBookIds();
+            if (listOfBookIds != null && !listOfBookIds.isEmpty() && !listOfBookIds.isBlank()) {
+                List<Long> list = Arrays.stream(listOfBookIds.split(",")).map(s -> Long.parseLong(s.trim())).toList();
+                ids.addAll(list);
+            }
+        }
+        Set<Book> books = new HashSet<>();
+        for (Long id: ids) {
+            bookService.getBookById(id).ifPresent(books::add);
+        }
+        return books;
+    }
 }

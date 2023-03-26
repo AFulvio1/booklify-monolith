@@ -54,10 +54,9 @@ public class SecurityConfiguration {
                     .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .logoutSuccessUrl("/login")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
                 .and()
                     .exceptionHandling()
+                    .accessDeniedPage("/404")
         ;
         http.headers().frameOptions().disable();
         return http.build();

@@ -67,14 +67,24 @@ public class CartController {
         }
         model.addAttribute("total", total);
         model.addAttribute("orderDTO", new OrderDTO());
+        model.addAttribute("cart", GlobalData.cart);
         return "checkout";
     }
 
 
     @PostMapping("/payNow")
-    public String postPayNow(@ModelAttribute(value = "orderDTO") OrderDTO orderDTO) {
+    public String postPayNow(
+            @ModelAttribute(value = "orderDTO") OrderDTO orderDTO
+    ){
 
         Order order = new Order();
+
+        StringBuilder listOfBookIds = new StringBuilder();
+        for (Book book : GlobalData.cart){
+            listOfBookIds.append(book.getId());
+            listOfBookIds.append(",");
+        }
+        order.setListOfBookIds(listOfBookIds.toString());
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = "";
@@ -94,7 +104,9 @@ public class CartController {
         order.setTelephone(orderDTO.getTelephone());
         if (orderDTO.getTotal() == null)
             order.setTotal(BigDecimal.ZERO);
-        order.setTotal(orderDTO.getTotal());
+        else {
+            order.setTotal(orderDTO.getTotal());
+        }
 
         orderRepository.save(order);
 

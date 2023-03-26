@@ -47,4 +47,5 @@ public class Order {
 
     private BigDecimal total;
 
+    private String listOfBookIds;
 }
