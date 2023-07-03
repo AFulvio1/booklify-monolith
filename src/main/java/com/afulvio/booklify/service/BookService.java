@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class BookService {
-    @Autowired
+
     private BookRepository bookRepository;
 
     public List<Book> getAllBooks() {
@@ -39,5 +39,10 @@ public class BookService {
 
     public List<Book> getAllBooksByAuthor(String keyword) {
         return bookRepository.findByAuthorContaining(keyword);
+    }
+
+    @Autowired
+    public void setBookRepository(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 }

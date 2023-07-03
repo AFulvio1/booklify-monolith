@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AuthenticationController {
 
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/login")
@@ -35,22 +32,32 @@ public class AuthenticationController {
 
     @GetMapping("/register")
     public String getRegister(Model model) {
-        model.addAttribute("userDTO", new UserDTO());
+        model.addAttribute("userDTO", UserDTO.builder().build());
         return "register";
     }
 
     @PostMapping("/register")
     public String postRegister(@ModelAttribute("userDTO") UserDTO userDTO, HttpServletRequest request) throws ServletException {
 
-        User user = new User();
-        user.setFirstname(userDTO.getFirstname());
-        user.setLastname(userDTO.getLastname());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-        user.setRole(Role.USER);
+        User user = User.builder()
+                .firstname(userDTO.getFirstname())
+                .lastname((userDTO.getLastname()))
+                .email(userDTO.getEmail())
+                .password(bCryptPasswordEncoder.encode(userDTO.getPassword()))
+                .role(Role.USER)
+                .build();
         userRepository.save(user);
 
         return "redirect:/login";
     }
 
+    @Autowired
+    public void setBCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    @Autowired
+    public  void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 }

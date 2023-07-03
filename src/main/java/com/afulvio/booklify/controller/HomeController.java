@@ -27,22 +27,17 @@ import java.util.*;
 @Controller
 public class HomeController {
 
-    @Autowired
     private CategoryService categoryService;
-    @Autowired
     private BookService bookService;
-    @Autowired
     private OrderService orderService;
-
 
     @GetMapping({"/","/home"})
     public String home(Model model, HttpSession session) {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = "";
-        if (principal instanceof User) {
+        if (principal instanceof User)
             username = ((User) principal).getUsername();
-        }
 
         Set<Book> recommendedBooks = getRecommendedBoooks(session);
         Set<Book> lastPurchaseBooks = getLastPurchaseBooks(username);
@@ -62,7 +57,7 @@ public class HomeController {
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("books", bookService.getAllBooks());
         model.addAttribute("cartCount", GlobalData.cart.size());
-        model.addAttribute("searchDTO", new SearchDTO());
+        model.addAttribute("searchDTO", SearchDTO.builder().build());
         return "shop";
     }
 
@@ -151,37 +146,42 @@ public class HomeController {
     private List<Integer> getRecommendedCategories(HttpSession session) {
         List<Integer> favoriteCategory = (List<Integer>) session.getAttribute("favoriteCategory");
 
-        if (favoriteCategory == null) {
+        if (favoriteCategory == null)
             favoriteCategory = new ArrayList<>();
-        }
+
         return favoriteCategory;
     }
 
     private Set<Book> getRecommendedBoooks(HttpSession session) {
         List<Integer> favoriteCategory = getRecommendedCategories(session);
         Set<Book> recommendedBooks = new HashSet<>();
-        if (!CollectionUtils.isEmpty(favoriteCategory)) {
-            for (Integer id : favoriteCategory) {
+        if (!CollectionUtils.isEmpty(favoriteCategory))
+            for (Integer id : favoriteCategory)
                 recommendedBooks.addAll(bookService.getAllBooksByCategory(id));
-            }
-        }
         return recommendedBooks;
     }
 
     private Set<Book> getLastPurchaseBooks(String username) {
-        Set<Long> ids = new HashSet<>();
         List<Order> orders = orderService.getAllOrderByEmail(username);
-        for (Order order : orders) {
-            String listOfBookIds = order.getListOfBookIds();
-            if (listOfBookIds != null && !listOfBookIds.isEmpty() && !listOfBookIds.isBlank()) {
-                List<Long> list = Arrays.stream(listOfBookIds.split(",")).map(s -> Long.parseLong(s.trim())).toList();
-                ids.addAll(list);
-            }
-        }
         Set<Book> books = new HashSet<>();
-        for (Long id: ids) {
-            bookService.getBookById(id).ifPresent(books::add);
-        }
+        for (Order order : orders)
+            if (!order.getBooks().isEmpty())
+                books.addAll(order.getBooks());
         return books;
+    }
+
+    @Autowired
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @Autowired
+    public void setCategoryService(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
     }
 }

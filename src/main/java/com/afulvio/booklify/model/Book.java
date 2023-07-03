@@ -1,12 +1,19 @@
 package com.afulvio.booklify.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "books")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,4 +46,7 @@ public class Book {
 
     private String imageName;
 
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order orders;
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
@@ -47,5 +48,6 @@ public class Order {
 
     private BigDecimal total;
 
-    private String listOfBookIds;
+    @OneToMany(mappedBy = "orders")
+    private List<Book> books;
 }

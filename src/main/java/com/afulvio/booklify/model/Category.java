@@ -1,10 +1,17 @@
 package com.afulvio.booklify.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "categories")
 public class Category {
 
     @Id
@@ -13,11 +20,4 @@ public class Category {
     private Integer id;
 
     private String name;
-
-    public Category() {}
-
-    public Category(String name) {
-        this.name = name;
-    }
-
 }

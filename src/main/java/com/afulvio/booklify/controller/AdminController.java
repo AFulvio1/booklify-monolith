@@ -22,15 +22,10 @@ import java.util.Optional;
 public class AdminController {
 
     public static String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/bookImages";
-
-    @Autowired
     private CategoryService categoryService;
-
-    @Autowired
     private BookService bookService;
 
-    public AdminController() {
-    }
+    public AdminController() {}
 
     @GetMapping("/admin")
     public String adminHome() {
@@ -81,7 +76,7 @@ public class AdminController {
 
     @GetMapping("/admin/books/add")
     public String getBooksAdd(Model model) {
-        model.addAttribute("bookDTO", new BookDTO());
+        model.addAttribute("bookDTO", BookDTO.builder().build());
         model.addAttribute("categories", categoryService.getAllCategories());
         return "booksAdd";
     }
@@ -90,18 +85,23 @@ public class AdminController {
     public String postBooksAdd(@ModelAttribute(value = "bookDTO") BookDTO bookDTO,
                                @RequestParam(value = "bookImage") MultipartFile file) throws IOException {
 
-        Book book = new Book();
-        categoryService.getCategoryById(bookDTO.getCategory().getId()).ifPresent(book::setCategory);
-        book.setPrice(bookDTO.getPrice());
-        book.setAuthor(bookDTO.getAuthor());
-        book.setTitle(bookDTO.getTitle());
-        book.setSubtitle(bookDTO.getSubtitle());
-        book.setVolume(bookDTO.getVolume());
-        book.setYearOfPublication(bookDTO.getYearOfPublication());
-        book.setPublishingHouse(bookDTO.getPublishingHouse());
-        book.setPlaceOfPublication(bookDTO.getPlaceOfPublication());
-        book.setIsbn(bookDTO.getIsbn());
-        book.setNote(bookDTO.getNote());
+        Category category = new Category();
+        if (categoryService.getCategoryById(bookDTO.getCategory().getId()).isPresent())
+            category = categoryService.getCategoryById(bookDTO.getCategory().getId()).get();
+
+        Book book = Book.builder()
+                .category(category)
+                .price(bookDTO.getPrice())
+                .author(bookDTO.getAuthor())
+                .title(bookDTO.getTitle())
+                .subtitle(bookDTO.getSubtitle())
+                .volume(bookDTO.getVolume())
+                .yearOfPublication(bookDTO.getYearOfPublication())
+                .publishingHouse(bookDTO.getPublishingHouse())
+                .placeOfPublication(bookDTO.getPlaceOfPublication())
+                .isbn(bookDTO.getIsbn())
+                .note(bookDTO.getNote())
+                .build();
 
         String imageUUID = "";
         if (!file.isEmpty()) {
@@ -135,24 +135,35 @@ public class AdminController {
         Optional<Book> opt = bookService.getBookById(id);
         Book book = opt.orElseGet(Book::new);
 
-        BookDTO bookDTO = new BookDTO();
-        bookDTO.setId(book.getId());
-        bookDTO.setCategory(book.getCategory());
-        bookDTO.setPrice(book.getPrice());
-        bookDTO.setAuthor(book.getAuthor());
-        bookDTO.setTitle(book.getTitle());
-        bookDTO.setSubtitle(book.getSubtitle());
-        bookDTO.setVolume(book.getVolume());
-        bookDTO.setYearOfPublication(book.getYearOfPublication());
-        bookDTO.setPublishingHouse(book.getPublishingHouse());
-        bookDTO.setPlaceOfPublication(book.getPlaceOfPublication());
-        bookDTO.setIsbn(book.getIsbn());
-        bookDTO.setNote(book.getNote());
-        bookDTO.setImageName(book.getImageName());
+        BookDTO bookDTO = BookDTO.builder()
+                .id(book.getId())
+                .category(book.getCategory())
+                .price(book.getPrice())
+                .author(book.getAuthor())
+                .title(book.getTitle())
+                .subtitle(book.getSubtitle())
+                .volume(book.getVolume())
+                .yearOfPublication(book.getYearOfPublication())
+                .publishingHouse(book.getPublishingHouse())
+                .placeOfPublication(book.getPlaceOfPublication())
+                .isbn(book.getIsbn())
+                .note(book.getNote())
+                .imageName(book.getImageName())
+                .build();
 
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("bookDTO", bookDTO);
 
         return "booksAdd";
+    }
+
+    @Autowired
+    public void setCategoryService(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    @Autowired
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 }

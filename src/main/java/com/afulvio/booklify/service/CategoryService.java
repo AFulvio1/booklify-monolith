@@ -11,7 +11,6 @@ import java.util.Optional;
 @Service
 public class CategoryService {
 
-    @Autowired
     private CategoryRepository categoryRepository;
 
     public List<Category> getAllCategories() {
@@ -31,4 +30,9 @@ public class CategoryService {
     }
 
     public Optional<Category> getCategoryById(int id) { return categoryRepository.findById(id); }
+
+    @Autowired
+    public void setCategoryRepository(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 }

@@ -13,7 +13,6 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
     private UserRepository userRepository;
 
     @Override
@@ -21,5 +20,10 @@ public class UserService implements UserDetailsService {
         Optional<User> user = userRepository.findByEmail(username);
         user.orElseThrow(() -> new UsernameNotFoundException("Utente non trovato"));
         return user.map(User::new).get();
+    }
+
+    @Autowired
+    public  void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

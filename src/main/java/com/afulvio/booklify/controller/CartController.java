@@ -23,13 +23,8 @@ import java.util.Optional;
 @Controller
 public class CartController {
 
-    @Autowired
     private BookService bookService;
-
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private OrderRepository orderRepository;
 
     @GetMapping("/cart")
@@ -66,7 +61,7 @@ public class CartController {
             total = total.add(book.getPrice());
         }
         model.addAttribute("total", total);
-        model.addAttribute("orderDTO", new OrderDTO());
+        model.addAttribute("orderDTO", OrderDTO.builder().build());
         model.addAttribute("cart", GlobalData.cart);
         return "checkout";
     }
@@ -76,41 +71,56 @@ public class CartController {
     public String postPayNow(
             @ModelAttribute(value = "orderDTO") OrderDTO orderDTO
     ){
-
-        Order order = new Order();
-
-        StringBuilder listOfBookIds = new StringBuilder();
-        for (Book book : GlobalData.cart){
-            listOfBookIds.append(book.getId());
-            listOfBookIds.append(",");
-        }
-        order.setListOfBookIds(listOfBookIds.toString());
-
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = "";
         if (principal instanceof User) {
             username = ((User) principal).getUsername();
         }
-        userRepository.findByEmail(username).ifPresent(order::setUser);
-        order.setNote(orderDTO.getNote());
-        order.setCity(orderDTO.getCity());
-        order.setEmail(orderDTO.getEmail());
-        order.setFirstAddress(orderDTO.getFirstAddress());
-        order.setSecondAddress(orderDTO.getSecondAddress());
-        order.setFirstname(orderDTO.getFirstname());
-        order.setLastname(orderDTO.getLastname());
-        order.setNation(orderDTO.getNation());
-        order.setPostCode(orderDTO.getPostCode());
-        order.setTelephone(orderDTO.getTelephone());
-        if (orderDTO.getTotal() == null)
-            order.setTotal(BigDecimal.ZERO);
-        else {
-            order.setTotal(orderDTO.getTotal());
+
+        User user = new User();
+        if (userRepository.findByEmail(username).isPresent()) {
+            user = userRepository.findByEmail(username).get();
         }
+
+        BigDecimal totale = new BigDecimal(0);
+        if (orderDTO.getTotal() != null) {
+            totale = orderDTO.getTotal();
+        }
+
+        Order order = Order.builder()
+                .books(GlobalData.cart)
+                .user(user)
+                .note(orderDTO.getNote())
+                .city(orderDTO.getCity())
+                .email(orderDTO.getEmail())
+                .firstAddress(orderDTO.getFirstAddress())
+                .secondAddress(orderDTO.getSecondAddress())
+                .firstname(orderDTO.getFirstname())
+                .lastname((orderDTO.getLastname()))
+                .nation(orderDTO.getNation())
+                .postCode(orderDTO.getPostCode())
+                .telephone(orderDTO.getTelephone())
+                .total(totale)
+                .build();
 
         orderRepository.save(order);
 
         GlobalData.cart.clear();
         return "index";
+    }
+
+    @Autowired
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setOrderRepository(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
     }
 }

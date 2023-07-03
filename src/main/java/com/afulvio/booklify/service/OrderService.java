@@ -10,10 +10,14 @@ import java.util.List;
 @Service
 public class OrderService {
 
-    @Autowired
     private OrderRepository orderRepository;
 
     public List<Order> getAllOrderByEmail(String username) {
         return orderRepository.findAllByEmail(username);
+    }
+
+    @Autowired
+    public void setOrderRepository(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
     }
 }
