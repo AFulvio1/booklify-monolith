@@ -1,53 +1,21 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="/images/favicon/favicon.ico">
-    <title>Index</title>
+    <title>Home</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    
+    <link rel="stylesheet" th:href="@{/css/global.css}" >
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-            <img th:src="@{/images/logo.png}" src="../static/images/logo.png" width="auto" height="40"
-                 class="d-inline-block align-top" alt=""/>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
-        <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
-        <span sec:authorize="isAuthenticated()">Benvenuto, <span sec:authentication="name"></span></span>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto"></ul>
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/}" href="#">Home</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/shop}" href="#">Shop</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/cart}" href="#">Cart</a>
-                </li>
-                <li class="nav-item active">
-                    <span class="nav-link" style="color: blue;" th:text="${cartCount}"></span>
-                </li>
-            </ul>
-
-        </div>
-    </div>
-</nav>
+<nav th:insert="~{fragments/navbar.html :: nav}"></nav>
 
 <div class="jumbotron text-center">
     <h1 class="display-4">Benvenuto in Boolify</h1>
@@ -67,7 +35,7 @@
             <div class="card-body">
                 <h5 class="card-title" th:text="${book.title}"></h5>
                 <p class="card-text" th:text="${book.author}"></p>
-                <a href="" th:href="@{/shop/viewbook/{id}(id=${book.id})}" class="btn btn-primary">Vedi il libro</a>
+                <a href="" th:href="@{/templates/pages/shop/viewbook/{id}(id=${book.id})}" class="btn btn-primary">Vedi il libro</a>
             </div>
         </div>
     </div>
@@ -81,7 +49,7 @@
             <div class="card-body">
                 <h5 class="card-title" th:text="${book.title}"></h5>
                 <p class="card-text" th:text="${book.author}"></p>
-                <a href="" th:href="@{/shop/viewbook/{id}(id=${book.id})}" class="btn btn-primary">Vedi il libro</a>
+                <a href="" th:href="@{/templates/pages/shop/viewbook/{id}(id=${book.id})}" class="btn btn-primary">Vedi il libro</a>
             </div>
         </div>
     </div>

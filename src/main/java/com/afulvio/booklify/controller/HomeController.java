@@ -58,7 +58,7 @@ public class HomeController {
         model.addAttribute("books", bookService.getAllBooks());
         model.addAttribute("cartCount", GlobalData.cart.size());
         model.addAttribute("searchDTO", SearchDTO.builder().build());
-        return "shop";
+        return "/pages/shop/shop";
     }
 
     @GetMapping("/shop/category/{id}")
@@ -73,7 +73,7 @@ public class HomeController {
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("books", bookService.getAllBooksByCategory(id));
         model.addAttribute("cartCount", GlobalData.cart.size());
-        return "shop";
+        return "/pages/shop/shop";
     }
 
     @GetMapping("/shop/viewbook/{id}")
@@ -98,7 +98,7 @@ public class HomeController {
 
         model.addAttribute("book", book);
         model.addAttribute("cartCount", GlobalData.cart.size());
-        return "viewBook";
+        return "pages/shop/viewBook";
     }
 
     @GetMapping("/shop/title")
@@ -119,7 +119,7 @@ public class HomeController {
             model.addAttribute("cartCount", GlobalData.cart.size());
             model.addAttribute("searchDTO", searchDTO);
         }
-        return "shop";
+        return "/pages/shop/shop";
     }
 
     @GetMapping("/shop/author")
@@ -140,7 +140,7 @@ public class HomeController {
             model.addAttribute("cartCount", GlobalData.cart.size());
             model.addAttribute("searchDTO", searchDTO);
         }
-        return "shop";
+        return "/pages/shop/shop";
     }
 
     private List<Integer> getRecommendedCategories(HttpSession session) {

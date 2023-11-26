@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="/images/favicon/favicon.ico">
+    <title>Inserisci un libro</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-
-    <title>Admin</title>
 
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light" >
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-            <img th:src="@{/images/logo.png}"  src="../static/images/logo.png" width="auto" height="40" class="d-inline-block align-top" alt=""/>
+        <a class="navbar-brand" href="/static">
+            <img th:src="@{/images/logo.png}" src="../../../static/images/logo.png" width="auto" height="40" class="d-inline-block align-top" alt=""/>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,44 +25,31 @@
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/admin}" href="#">Admin-Home</a>
+                    <a class="nav-link" th:href="@{/templates/pages/admin}" href="#">Admin-Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
                 </li>
-
             </ul>
-
         </div>
     </div>
 </nav>
-<div class="jumbotron text-center">
-    <h1 class="display-4">Admin Section</h1>
-    <p><mark>CMS</mark>Per la gestione di categorie e libri</p>
-</div>
-<div class="container-fluid">
+<div class="container">
     <div class="row">
-        <div class="col-sm-6 pt-6" >
-            <div class="card" style="background-color:white;">
-                <div class="card-body">
-                    <h4 class="card-title">Categorie</h4>
-                    <p class="card-text">Gestisci le categorie qui</p>
-                    <a href="#" th:href="@{/admin/categories}" class="card-link btn btn-primary">Gestisci</a>
-
+        <div class="col-sm-4">
+            <form th:action="@{/templates/pages/admin/categories/add}" method="post" th:object="${category}">
+                <input type="hidden" name="id"  th:field="*{id}">
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" class="form-control" required th:field="*{name}" name="name" id="name"  placeholder="Inserisci un nome di categoria">
                 </div>
-            </div>
-        </div>
-        <div class="col-sm-6 pt-6" >
-            <div class="card" style="background-color:white;">
-                <div class="card-body">
-                    <h4 class="card-title">Libri</h4>
-                    <p class="card-text">Gestisci i tuoi libri qui</p>
-                    <a href="#" th:href="@{/admin/books}" class="card-link btn btn-primary">Gestisci</a>
 
-                </div>
-            </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
-
     </div>
 </div>
 

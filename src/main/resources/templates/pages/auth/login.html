@@ -16,8 +16,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light" >
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-            <img th:src="@{/images/logo.png}"  src="../static/images/logo.png" width="auto" height="40" class="d-inline-block align-top" alt=""/>
+        <a class="navbar-brand" href="/static">
+            <img th:src="@{/images/logo.png}" src="../../../static/images/logo.png" width="auto" height="40" class="d-inline-block align-top" alt=""/>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -31,10 +31,10 @@
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/}" href="#">Home</a>
+                    <a class="nav-link" th:href="@{/static}" href="#">Home</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/shop}" href="#">Shop</a>
+                    <a class="nav-link" th:href="@{/templates/pages/shop}" href="#">Shop</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" th:href="@{/cart}" href="#">Cart</a>
@@ -65,7 +65,7 @@
 
                 <input type="submit" value="Login" href="./index.html" th:href="@{/home}" class="btn btn-primary btn-block">
                 <br>
-                <span >Non hai un account? <a class="linkControl" href="./register.html" th:href="@{/register}">Registrati qui</a></span>
+                <span >Non hai un account? <a class="linkControl" href="register.html" th:href="@{/register}">Registrati qui</a></span>
                 <br>
                 <a href="" th:href="@{/forgotpassword}">Password dimenticata ?</a>
             </form>

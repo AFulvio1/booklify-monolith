@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="/images/favicon/favicon.ico">
-    <title>Register</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
-</head>
+    <title>Categories</title>
+
 <body>
-
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light" >
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">
-            <img th:src="@{/images/logo.png}"  src="../static/images/logo.png" width="auto" height="40" class="d-inline-block align-top" alt=""/>
+        <a class="navbar-brand" href="/static">
+            <img th:src="@{/images/logo.png}" src="../../../static/images/logo.png" width="auto" height="40" class="d-inline-block align-top" alt=""/>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -27,48 +25,44 @@
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/}" href="#">Home</a>
+                    <a class="nav-link" th:href="@{/templates/pages/admin}" href="#">Admin-Home</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/shop}" href="#">Shop</a>
+                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}" href="#">Login</a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">Logout</a>
+                </li>
+
             </ul>
 
         </div>
     </div>
 </nav>
-
 <div class="container">
-    <div class="col-sm-6">
-        <h3 style="margin-top: 10px">Registrati ora</h3>
-        <p>Inserisci i tuoi dati per completare la registrazione</p>
-        <form th:action="@{/register}" th:object="${userDTO}" method="post">
-            <input type="hidden" name="id" th:field="*{id}">
-            <div class="form-group">
-                <label for="firstname">Nome</label>
-                <input type="text" name="firstname" id="firstname" th:field="*{firstname}" required placeholder="Your firstname" class="form-control form-control-lg">
-            </div>
-            <div class="form-group">
-                <label for="lastname">Cognome</label>
-                <input type="text" name="lastname" id="lastname" th:field="*{lastname}" required placeholder="Your lastname" class="form-control form-control-lg">
-            </div>
-            <div class="form-group">
-                <label for="email">Indirizzo mail</label>
-                <input type="email" class="form-control form-control-lg" th:field="*{email}" required minlength="6" placeholder="Email" name="email" id="email"
-                       aria-describedby="emailHelp">
-                <small id="emailHelp" class="form-text text-muted">Non comunicare la tua password con nessuno</small>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control form-control-lg" required placeholder="Password" name="password"
-                       id="password" th:field="*{password}">
-            </div>
 
-            <input type="submit" value="Registrati" class="btn btn-primary btn-block">
-            <span style="margin-top: 10px">Se hai già un account <a class="linkControl" href="./login.html" th:href="@{/login}">Login</a></span>
-        </form>
-    </div>
+    <a th:href="@{/templates/pages/admin/categories/add}" style="margin: 20px 0" class="btn btn-primary">Inserisci una categoria</a>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">SN</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Aggiorna</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="category, iStat : ${categories}">
+            <th scope="row" th:text="${iStat.index + 1}">1</th>
+            <td th:text="${category.name}">Larry</td>
+
+            <td><a href="" th:href="@{/templates/pages/admin/categories/update/{id}(id=${category.id})}" class="btn btn-warning">Aggiorna</a></td>
+
+        </tr>
+        </tbody>
+    </table>
 </div>
+
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
